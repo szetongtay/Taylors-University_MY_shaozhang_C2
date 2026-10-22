@@ -1,9 +1,9 @@
 // ==========================================
-// 1. 数据库（海量生成：每个时间段强制保底 >50）
+// 1. foodhunter>50）
 // ==========================================
 const FOODS = [];
 
-// 早餐池（20个基础品类，派生出50个不同口味/组合）
+// breakfast
 const breakfastItems = [
     { name: 'Roti Canai', price: 5, emoji: '🥞', diet: 'Vegetarian', pax: '1-2', halal: true, celebration: false, location: 'Restoran Pelita', openTime: '24 Hours', openDays: 'Everyday' },
     { name: 'Nasi Lemak Ayam', price: 10, emoji: '🍛', diet: 'None', pax: '1-2', halal: true, celebration: false, location: 'Village Park', openTime: '7:00 AM - 2:00 PM', openDays: 'Mon-Sat' },
@@ -23,7 +23,7 @@ for(let i=0; i<50; i++) {
     FOODS.push(item);
 }
 
-// 午餐池
+// lunch
 const lunchItems = [
     { name: 'Chicken Rice', price: 15, emoji: '🍗', diet: 'None', pax: '1-2', halal: true, celebration: false, location: 'Nam Heong', openTime: '10:00 AM - 8:00 PM', openDays: 'Everyday' },
     { name: 'Pan Mee', price: 12, emoji: '🍜', diet: 'Vegetarian', pax: '1-2', halal: false, celebration: false, location: 'Jojo Pan Mee', openTime: '10:30 AM - 9:00 PM', openDays: 'Tue-Sun' },
@@ -43,7 +43,7 @@ for(let i=0; i<50; i++) {
     FOODS.push(item);
 }
 
-// 晚餐池
+// dinner
 const dinnerItems = [
     { name: 'Bak Kut Teh', price: 25, emoji: '🍲', diet: 'None', pax: '3-5', halal: false, celebration: true, location: 'Klang BKT', openTime: '5:00 PM - 11:00 PM', openDays: 'Everyday' },
     { name: 'Sushi Platter', price: 45, emoji: '🍣', diet: 'None', pax: '3-5', halal: false, celebration: true, location: 'Tokyo Sushi', openTime: '6:00 PM - 11:30 PM', openDays: 'Tue-Sun' },
@@ -63,7 +63,7 @@ for(let i=0; i<50; i++) {
     FOODS.push(item);
 }
 
-// 下午茶池 (Tea Time) - 纯甜品/小吃，绝对无主食
+// (Tea Time)
 const teaItems = [
     { name: 'Cheese Cake', price: 15, emoji: '🍰', diet: 'Vegetarian', pax: '1-2', halal: true, celebration: false, location: 'Secret Recipe', openTime: '10:00 AM - 10:00 PM', openDays: 'Everyday' },
     { name: 'Mango Bingsu', price: 25, emoji: '🍧', diet: 'Vegetarian', pax: '1-2', halal: true, celebration: false, location: 'MyKori', openTime: '12:00 PM - 11:00 PM', openDays: 'Everyday' },
@@ -83,7 +83,7 @@ for(let i=0; i<50; i++) {
     FOODS.push(item);
 }
 
-// 宵夜池 (Supper)
+//  (Supper)
 const supperItems = [
     { name: 'Mamak Noodles', price: 12, emoji: '🍜', diet: 'None', pax: '1-2', halal: true, celebration: false, location: 'Murni', openTime: '24 Hours', openDays: 'Everyday' },
     { name: 'Burger Ramly', price: 15, emoji: '🍔', diet: 'None', pax: '1-2', halal: true, celebration: false, location: 'Ramly Stall', openTime: '6:00 PM - 3:00 AM', openDays: 'Everyday' },
@@ -103,7 +103,7 @@ for(let i=0; i<50; i++) {
     FOODS.push(item);
 }
 
-// 饮料池 (Drinks)
+//  (Drinks)
 const drinkItems = [
     { name: 'Watermelon Juice', price: 8, emoji: '🍉', diet: 'Vegan', pax: '1-2', halal: true, celebration: false, location: 'Juice Works', openTime: '9:00 AM - 9:00 PM', openDays: 'Mon-Sat' },
     { name: 'Orange Juice', price: 9, emoji: '🍊', diet: 'Vegan', pax: '1-2', halal: true, celebration: false, location: 'Juice Bar', openTime: '8:00 AM - 8:00 PM', openDays: 'Everyday' },
@@ -124,16 +124,14 @@ for(let i=0; i<50; i++) {
 }
 
 
-// ==========================================
-// 2. 状态与核心逻辑
-// ==========================================
+
 const mealTime = sessionStorage.getItem('mealTime') || 'Lunch';
 const currentPax = sessionStorage.getItem('pax') || 'Any';
 const currentBudget = sessionStorage.getItem('budget') || 'Any';
 const currentDiet = sessionStorage.getItem('diet') || 'Any';
 
 let currentDeck = []; 
-let lastPick = null; // 记录上一次抽中的，用于防止极端情况下的重复
+let lastPick = null; // 
 
 function matchBudget(food, budget) {
     if (budget === 'Any') return true;
@@ -162,27 +160,23 @@ function matchDiet(food, diet) {
     return true;
 }
 
-// ==========================================
-// 3. 核心抽签逻辑 (绝对保底50，且不重复)
-// ==========================================
+
 function buildDeck() {
-    // 第一步：锁定时间池（绝不跨界）
+  
     const timePool = FOODS.filter(food => food.time === mealTime);
 
-    // 第二步：严格匹配条件
+
     let filtered = timePool.filter(food => 
         matchBudget(food, currentBudget) && 
         matchPax(food, currentPax) && 
         matchDiet(food, currentDiet)
     );
 
-    // 核心逻辑：不管条件多苛刻，如果过滤后的结果不足50个，就退回该时间段的全部卡池！
-    // 这样保证任何时间+任何条件，你的卡池永远有 50 个。
     if (filtered.length < 50) {
         filtered = timePool;
     }
 
-    // 彻底打乱卡池 (Fisher-Yates)
+    //  (Fisher-Yates)
     for (let i = filtered.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [filtered[i], filtered[j]] = [filtered[j], filtered[i]];
@@ -192,34 +186,32 @@ function buildDeck() {
 }
 
 // ==========================================
-// 4. 抽签与 UI 交互
+// 4. UI 
 // ==========================================
 function pickLunch() {
-    // 如果卡池空了（抽完了），重新洗牌
+
     if (currentDeck.length === 0) {
         buildDeck();
     }
 
     let selectedFood;
     
-    // 从卡池取出一张牌
+  
     selectedFood = currentDeck.pop();
 
-    // 绝杀防重复（如果重新洗牌后，第一张刚好和上一次一样，就再换一张）
+
     if (lastPick && selectedFood && selectedFood.name === lastPick.name && currentDeck.length > 0) {
-        // 把它塞回底部，重新抽一张
+
         currentDeck.unshift(selectedFood);
         selectedFood = currentDeck.pop();
     }
-    
-    // 记录这次抽到的
+ 
     lastPick = selectedFood;
 
     if (!selectedFood) {
         selectedFood = { name: 'Error', price: 0, emoji: '❓', pax: '1-2', location: 'None', openTime: 'None', openDays: 'None' };
     }
 
-    // 播放动画
     const content = document.getElementById('result-content');
     content.style.animation = 'none';
     content.offsetHeight;
@@ -227,7 +219,7 @@ function pickLunch() {
 
     fireConfetti();
 
-    // 更新 UI
+    //  UI
     let displayTime = mealTime === 'Drinks' ? 'BEVERAGE' : mealTime.toUpperCase();
     document.getElementById('r-time').innerText = displayTime;
     document.getElementById('r-emoji').innerText = selectedFood.emoji;
@@ -261,7 +253,6 @@ function fireConfetti() {
     }
 }
 
-// 页面加载完成后执行
 window.addEventListener('DOMContentLoaded', () => {
     buildDeck();
     pickLunch();
