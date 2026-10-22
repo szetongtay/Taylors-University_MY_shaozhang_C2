@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Hunter</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&family=Nunito:wght@600;800&display=swap');
+        :root { --primary-red: #FF4757; --primary-orange: #FF7F50; --primary-yellow: #FFD32A; --text-dark: #2F3542; }
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Nunito', sans-serif; background: linear-gradient(135deg, #FFD3A5 0%, #FD6585 100%); display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow: hidden; }
+        .app-container {
+            width: 90%; max-width: 1100px; height: 85vh; max-height: 650px;
+            background-color: #FFF9F4; border-radius: 36px; box-shadow: 0 20px 50px rgba(253, 101, 133, 0.4), inset 0 0 0 8px #FFF;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; overflow: hidden; padding: 40px; text-align: center;
+        }
+        .bubble { position: absolute; border-radius: 50%; background: rgba(255,255,255,0.4); z-index: 1; pointer-events: none; }
+        .bubble-1 { width: 300px; height: 300px; top: -100px; left: -100px; }
+        .bubble-2 { width: 200px; height: 200px; bottom: -50px; right: -50px; background: rgba(255, 211, 42, 0.4); }
+        .content { z-index: 2; max-width: 700px; animation: zoomIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes zoomIn { 0% { transform: scale(0.9); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        .emoji-header { font-size: 100px; margin-bottom: 20px; filter: drop-shadow(0 10px 10px rgba(0,0,0,0.1)); }
+        h1 { font-family: 'Fredoka', sans-serif; font-size: 56px; color: var(--primary-red); text-shadow: 2px 2px 0px var(--primary-yellow); margin-bottom: 20px; }
+        p { font-size: 20px; color: var(--text-dark); font-weight: 600; line-height: 1.6; margin-bottom: 40px; }
+        .start-btn { background: linear-gradient(135deg, var(--primary-red), var(--primary-orange)); color: #FFF; border: none; padding: 20px 60px; border-radius: 50px; font-family: 'Fredoka', sans-serif; font-size: 32px; font-weight: 700; cursor: pointer; box-shadow: 0 10px 0 #C0392B, 0 15px 20px rgba(255, 71, 87, 0.4); transition: all 0.1s; }
+        .start-btn:active { transform: translateY(8px); box-shadow: 0 2px 0 #C0392B; }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="bubble bubble-1"></div>
+        <div class="bubble bubble-2"></div>
+        <div class="content">
+            <div class="emoji-header">🏹🍔</div>
+            <h1>Welcome to Food Hunter</h1>
+            <p>Stop wasting time deciding what to eat!<br>Set your time, budget, and preferences. Let us hunt the perfect meal for you completely locally and securely.</p>
+            <button class="start-btn" onclick="window.location.href='picktime.html'">START HUNTING</button>
+        </div>
+    </div>
+</body>
+</html>

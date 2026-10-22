@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Hunter - Result</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&family=Nunito:wght@600;800&display=swap');
+        
+        :root { 
+            --primary-red: #FF4757; 
+            --primary-orange: #FF7F50; 
+            --primary-yellow: #FFD32A; 
+            --text-dark: #2F3542; 
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        
+        body { 
+            font-family: 'Nunito', sans-serif; 
+            background: linear-gradient(135deg, #FFD3A5 0%, #FD6585 100%); 
+            display: flex; justify-content: center; align-items: center; 
+            min-height: 100vh; overflow: hidden; 
+        }
+        
+        .app-container { 
+            width: 90%; max-width: 1100px; height: 90vh; max-height: 700px;
+            background: radial-gradient(circle, #FFF9F4 0%, #FFEAA7 100%); 
+            border-radius: 36px; 
+            box-shadow: 0 20px 50px rgba(253, 101, 133, 0.4), inset 0 0 0 8px #FFF; 
+            display: flex; flex-direction: column; justify-content: center; align-items: center; 
+            position: relative; overflow: hidden; text-align: center; 
+            padding: 20px;
+        }
+
+        .result-content { 
+            z-index: 2; 
+            animation: zoomIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            width: 100%; 
+            display: flex; flex-direction: column; 
+            align-items: center; 
+            height: 100%;
+            justify-content: space-evenly; 
+            padding-top: 10px;
+        }
+        
+        @keyframes zoomIn { 
+            0% { transform: scale(0.8); opacity: 0; } 
+            100% { transform: scale(1); opacity: 1; } 
+        }
+        
+        .header-section { display: flex; flex-direction: column; align-items: center; }
+        .result-time { font-size: 20px; color: var(--primary-orange); font-weight: 800; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 5px; }
+        .result-emoji { font-size: 110px; line-height: 1; margin-bottom: 10px; filter: drop-shadow(0 10px 10px rgba(0,0,0,0.1)); }
+        .result-name { font-family: 'Fredoka', sans-serif; font-size: 44px; color: var(--primary-red); line-height: 1.1; }
+        
+        .restaurant-info {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 12px 25px;
+            border-radius: 20px;
+            border: 2px dashed var(--primary-orange);
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin: 10px 0;
+            width: 80%;
+            max-width: 400px;
+        }
+        .restaurant-info span { display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .restaurant-info .highlight { color: var(--primary-red); }
+
+        /* The Button Link */
+        .maps-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: #FFFFFF;
+            color: #4285F4;
+            text-decoration: none; /* Crucial for removing underline */
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: 800;
+            font-size: 16px;
+            box-shadow: 0 4px 10px rgba(66, 133, 244, 0.2);
+            border: 2px solid #4285F4;
+            transition: all 0.2s;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        .maps-btn:hover { background: #4285F4; color: #FFF; }
+
+        .result-tags { display: flex; gap: 12px; justify-content: center; }
+        .tag { background: #FFF; padding: 6px 18px; border-radius: 30px; font-weight: 800; font-size: 16px; color: var(--primary-orange); box-shadow: 0 5px 15px rgba(0,0,0,0.05); border: 3px solid var(--primary-yellow); }
+        
+        .action-buttons { 
+            display: flex; 
+            gap: 15px; 
+            justify-content: center; 
+            width: 100%; 
+            max-width: 500px; 
+            padding: 0 10px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .draw-again-btn { 
+            background: linear-gradient(135deg, #FFD32A, #FF9F43); 
+            color: var(--text-dark); 
+            border: none; 
+            padding: 16px 20px; 
+            border-radius: 40px; 
+            font-family: 'Fredoka', sans-serif; 
+            font-size: 20px; 
+            cursor: pointer; 
+            box-shadow: 0 6px 0 #E67E22; 
+            transition: all 0.1s; 
+            flex: 1; 
+            display: flex; justify-content: center; align-items: center; white-space: nowrap;
+        }
+        .draw-again-btn:active { transform: translateY(6px); box-shadow: 0 0px 0 #E67E22; }
+        
+        .back-btn { 
+            background: var(--text-dark); 
+            color: #FFF; 
+            border: none; 
+            padding: 16px 20px; 
+            border-radius: 40px; 
+            font-family: 'Fredoka', sans-serif; 
+            font-size: 20px; 
+            cursor: pointer; 
+            box-shadow: 0 6px 0 #000; 
+            transition: all 0.1s; 
+            flex: 1; 
+            display: flex; justify-content: center; align-items: center; white-space: nowrap;
+        }
+        .back-btn:active { transform: translateY(6px); box-shadow: 0 0px 0 #000; }
+        
+        #confetti-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; z-index: 5; }
+        .confetti { position: absolute; width: 12px; height: 12px; background-color: #f00; animation: fall 3s linear forwards; }
+        @keyframes fall { 0% { transform: translateY(-20px) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div id="confetti-container"></div>
+        <div class="result-content" id="result-content">
+            
+            <div class="header-section">
+                <div class="result-time" id="r-time">LUNCH</div>
+                <div class="result-emoji" id="r-emoji">🍛</div>
+                <div class="result-name" id="r-name">Nasi Lemak</div>
+            </div>
+            
+            <div class="restaurant-info">
+                <span>📍 <span id="r-location" class="highlight">Mamak Stall</span></span>
+                <span>🕒 <span id="r-time-detail">24 Hours</span></span>
+                <span>📅 <span id="r-days">Open Everyday</span></span>
+            </div>
+            
+            <!-- Google Maps Link with security attributes -->
+            <a id="google-maps-link" href="#" target="_blank" rel="noopener noreferrer" class="maps-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                Open in Google Maps
+            </a>
+
+            <div class="result-tags">
+                <span class="tag" id="r-price">RM 10</span>
+                <span class="tag" id="r-pax">1-2 pax</span>
+                <span class="tag" id="r-diet">Food</span>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="back-btn" onclick="window.location.href='picktime.html'">← CHANGE</button>
+                <button class="draw-again-btn" onclick="pickLunch()">🔄 DRAW AGAIN</button>
+            </div>
+            
+        </div>
+    </div>
+    <script src="result.js"></script>
+</body>
+</html>
